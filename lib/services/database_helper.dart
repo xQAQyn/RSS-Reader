@@ -77,6 +77,9 @@ class DatabaseHelper {
 
   Future<void> deleteFeed(int feedId) async {
     Database db = await database;
-    await db.delete('feeds', where: 'id = ?', whereArgs: [feedId]);
+    await db.transaction((txn) async {
+      await txn.delete('items', where: 'feed_id = ?', whereArgs: [feedId]);
+      await txn.delete('feeds', where: 'id = ?', whereArgs: [feedId]);
+    });
   }
 }
