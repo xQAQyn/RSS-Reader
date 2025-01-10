@@ -14,4 +14,13 @@ class RssFeed {
       'last_updated': lastUpdated,
     };
   }
+
+  factory RssFeed.fromMap(Map<String, dynamic> map) {
+    return RssFeed(
+      id: map['id'],
+      title: map['title'],
+      url: map['url'],
+      lastUpdated: map['last_updated'],
+    );
+  }
 }

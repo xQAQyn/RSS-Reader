@@ -20,4 +20,16 @@ class RssItem {
       'is_read': isRead ? 1 : 0,
     };
   }
+
+  factory RssItem.fromMap(Map<String, dynamic> map) {
+    return RssItem(
+      id: map['id'],
+      feedId: map['feed_id'],
+      title: map['title'],
+      description: map['description'],
+      link: map['link'],
+      pubDate: map['pub_date'],
+      isRead: map['is_read'] == 1,
+    );
+  }
 }

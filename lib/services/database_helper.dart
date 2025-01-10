@@ -82,4 +82,27 @@ class DatabaseHelper {
       await txn.delete('feeds', where: 'id = ?', whereArgs: [feedId]);
     });
   }
+
+  Future<Map<String, dynamic>?> getFeedByUrl(String url) async {
+    final db = await database;
+    final result = await db.query('feeds', where: 'url = ?', whereArgs: [url]);
+    return result.isNotEmpty ? result.first : null;
+  }
+
+  Future<Map<String, dynamic>?> getItemByLink(String link) async {
+    final db = await database;
+    final result = await db.query('items', where: 'link = ?', whereArgs: [link]);
+    return result.isNotEmpty ? result.first : null;
+  }
+
+  Future<Map<String, dynamic>?> getFeedById(int id) async {
+    final db = await database;
+    final result = await db.query('feeds', where: 'id = ?', whereArgs: [id]);
+    return result.isNotEmpty ? result.first : null;
+  }
+
+  Future<void> updateFeedLastUpdated(int feedId, int lastUpdated) async {
+    final db = await database;
+    await db.update('feeds', {'last_updated': lastUpdated}, where: 'id = ?', whereArgs: [feedId]);
+  }
 }
