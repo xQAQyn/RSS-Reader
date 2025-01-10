@@ -1,5 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import '../utils/constants.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
@@ -52,57 +53,57 @@ class DatabaseHelper {
 
   Future<int> insertFeed(Map<String, dynamic> feed) async {
     Database db = await database;
-    return await db.insert('feeds', feed);
+    return await db.insert(Constants.feedsTable, feed);
   }
 
   Future<int> insertItem(Map<String, dynamic> item) async {
     Database db = await database;
-    return await db.insert('items', item);
+    return await db.insert(Constants.itemsTable, item);
   }
 
   Future<List<Map<String, dynamic>>> getFeeds() async {
     Database db = await database;
-    return await db.query('feeds');
+    return await db.query(Constants.feedsTable);
   }
 
   Future<List<Map<String, dynamic>>> getItemsByFeedId(int feedId) async {
     Database db = await database;
-    return await db.query('items', where: 'feed_id = ?', whereArgs: [feedId]);
+    return await db.query(Constants.itemsTable, where: 'feed_id = ?', whereArgs: [feedId]);
   }
 
   Future<void> markItemAsRead(int itemId) async {
     Database db = await database;
-    await db.update('items', {'is_read': 1}, where: 'id = ?', whereArgs: [itemId]);
+    await db.update(Constants.itemsTable, {'is_read': 1}, where: 'id = ?', whereArgs: [itemId]);
   }
 
   Future<void> deleteFeed(int feedId) async {
     Database db = await database;
     await db.transaction((txn) async {
-      await txn.delete('items', where: 'feed_id = ?', whereArgs: [feedId]);
-      await txn.delete('feeds', where: 'id = ?', whereArgs: [feedId]);
+      await txn.delete(Constants.itemsTable, where: 'feed_id = ?', whereArgs: [feedId]);
+      await txn.delete(Constants.feedsTable, where: 'id = ?', whereArgs: [feedId]);
     });
   }
 
   Future<Map<String, dynamic>?> getFeedByUrl(String url) async {
     final db = await database;
-    final result = await db.query('feeds', where: 'url = ?', whereArgs: [url]);
+    final result = await db.query(Constants.feedsTable, where: 'url = ?', whereArgs: [url]);
     return result.isNotEmpty ? result.first : null;
   }
 
   Future<Map<String, dynamic>?> getItemByLink(String link) async {
     final db = await database;
-    final result = await db.query('items', where: 'link = ?', whereArgs: [link]);
+    final result = await db.query(Constants.itemsTable, where: 'link = ?', whereArgs: [link]);
     return result.isNotEmpty ? result.first : null;
   }
 
   Future<Map<String, dynamic>?> getFeedById(int id) async {
     final db = await database;
-    final result = await db.query('feeds', where: 'id = ?', whereArgs: [id]);
+    final result = await db.query(Constants.feedsTable, where: 'id = ?', whereArgs: [id]);
     return result.isNotEmpty ? result.first : null;
   }
 
   Future<void> updateFeedLastUpdated(int feedId, int lastUpdated) async {
     final db = await database;
-    await db.update('feeds', {'last_updated': lastUpdated}, where: 'id = ?', whereArgs: [feedId]);
+    await db.update(Constants.feedsTable, {'last_updated': lastUpdated}, where: 'id = ?', whereArgs: [feedId]);
   }
 }
