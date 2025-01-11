@@ -106,4 +106,10 @@ class DatabaseHelper {
     final db = await database;
     await db.update(Constants.feedsTable, {'last_updated': lastUpdated}, where: 'id = ?', whereArgs: [feedId]);
   }
+
+  Future<void> clearDatabase() async {
+    final db = await database;
+    await db.delete(Constants.feedsTable);
+    await db.delete(Constants.itemsTable);
+  }
 }

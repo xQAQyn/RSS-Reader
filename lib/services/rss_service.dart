@@ -1,8 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:xml/xml.dart' as xml;
 import '../models/rss_feed.dart';
 import '../models/rss_item.dart';
 import '../repositories/rss_repository.dart';
+import 'package:rss_dart/dart_rss.dart' as rss;
+import 'package:intl/intl.dart';
 
 class RssService {
   final RssRepository _rssRepository = RssRepository();
@@ -10,25 +13,29 @@ class RssService {
   Future<void> fetchRssFeed(String url) async {
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
-      final document = xml.XmlDocument.parse(response.body);
-      final channel = document.findElements('channel').first;
+      // 打印 RSS 源响应到Log
+      if (kDebugMode) {
+        print(response.body);
+      }
+      final feedData = rss.RssFeed.parse(response.body);
 
-      final feedTitle = channel.findElements('title').first.text;
       final feed = RssFeed(
-        title: feedTitle,
+        title: feedData.title!,
         url: url,
         lastUpdated: DateTime.now().millisecondsSinceEpoch,
       );
 
       final feedId = await _rssRepository.insertFeed(feed);
 
-      final items = channel.findElements('item').map((element) {
+      final DateFormat format = DateFormat('EEE, dd MMM yyyy HH:mm:ss Z', 'en_US');
+
+      final items = feedData.items.map((element) {
         return RssItem(
           feedId: feedId,
-          title: element.findElements('title').first.text,
-          description: element.findElements('description').first.text,
-          link: element.findElements('link').first.text,
-          pubDate: DateTime.parse(element.findElements('pubDate').first.text).millisecondsSinceEpoch,
+          title: element.title!,
+          description: element.description!,
+          link: element.link!,
+          pubDate: format.parse(element.pubDate!).millisecondsSinceEpoch,
         );
       }).toList();
 
