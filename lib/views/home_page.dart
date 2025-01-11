@@ -7,7 +7,7 @@ import '../utils/styles.dart';
 import '../repositories/rss_repository.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   _HomePageState createState() => _HomePageState();

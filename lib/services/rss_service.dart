@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'package:xml/xml.dart' as xml;
 import '../models/rss_feed.dart';
 import '../models/rss_item.dart';
 import '../repositories/rss_repository.dart';
