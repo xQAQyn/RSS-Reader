@@ -80,7 +80,10 @@ class _HomePageState extends State<HomePage> {
             Navigator.pushNamed(
               context, 
               '/detail',
-              arguments: items,
+              arguments: {
+                'items': items,
+                'feed': feed,
+              },
             );
           },
         ),

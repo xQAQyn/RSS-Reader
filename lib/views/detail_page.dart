@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import '../models/rss_item.dart';
+import '../models/rss_feed.dart';
 import '../widgets/rss_item_widget.dart';
 import '../utils/styles.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DetailPage extends StatelessWidget {
   final List<RssItem> items;
+  final RssFeed feed;
 
-  const DetailPage({required this.items, super.key});
+  const DetailPage({required this.items, required this.feed, super.key});
 
   Future<void> _launchUrl(String url) async {
     Uri? uri = Uri.tryParse(url);
@@ -24,7 +26,7 @@ class DetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('RSS Items'),
+        title: Text(feed.title),
       ),
       body: Container(
         decoration: AppStyles.pageBackground,

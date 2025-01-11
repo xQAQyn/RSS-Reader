@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:rss_reader/views/home_page.dart';
 import 'package:rss_reader/views/detail_page.dart';
 import 'package:rss_reader/models/rss_item.dart';
+import 'package:rss_reader/models/rss_feed.dart';
 import 'package:rss_reader/services/database_helper.dart';
 
 void main() {
@@ -39,8 +40,10 @@ class MyApp extends StatelessWidget {
       home: const HomePage(),
       routes: {
         '/detail': (context) {
-          final items = ModalRoute.of(context)!.settings.arguments as List<RssItem>;
-          return DetailPage(items: items);
+          final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+          final items = args['items'] as List<RssItem>;
+          final feed = args['feed'] as RssFeed;
+          return DetailPage(items: items, feed: feed);
         },
       },
     );
