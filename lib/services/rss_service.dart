@@ -10,9 +10,8 @@ class RssService {
   final RssRepository _rssRepository = RssRepository();
 
   Future<void> fetchRssFeed(String url) async {
-    final response = await http.get(Uri.parse(url));
+    final response = await http.get(Uri.parse(url.trim()));
     if (response.statusCode == 200) {
-      // 打印 RSS 源响应到Log
       if (kDebugMode) {
         print(response.body);
       }
