@@ -5,8 +5,9 @@ import '../utils/styles.dart';
 class FeedListWidget extends StatelessWidget {
   final List<RssFeed> feeds;
   final Function(RssFeed) onFeedTap;
+  final Function(RssFeed) onFeedDelete;
 
-  const FeedListWidget({required this.feeds, required this.onFeedTap, super.key});
+  const FeedListWidget({required this.feeds, required this.onFeedTap, super.key, required this.onFeedDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +24,7 @@ class FeedListWidget extends StatelessWidget {
           ),
           child: InkWell(
             onTap: () => onFeedTap(feed),
+            onLongPress: () => onFeedDelete(feed),
             borderRadius: BorderRadius.circular(8),
             child: Padding(
               padding: EdgeInsets.all(16),

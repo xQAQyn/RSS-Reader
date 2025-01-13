@@ -72,21 +72,54 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Container(
         decoration: AppStyles.pageBackground,
-        child: FeedListWidget(
-          feeds: feeds,
-          onFeedTap: (feed) async {
-            int nonNullFeedId = feed.id!;
-            List<RssItem> items = await _rssRepository.getItemsByFeedId(nonNullFeedId);
-            Navigator.pushNamed(
-              context, 
-              '/detail',
-              arguments: {
-                'items': items,
-                'feed': feed,
-              },
-            );
-          },
-        ),
+        child: feeds.isEmpty
+            ? Center(
+                child: Text(
+                  'No feeds added',
+                  style: AppStyles.titleStyle,
+                ),
+              )
+            : FeedListWidget(
+                feeds: feeds,
+                onFeedTap: (feed) async {
+                  int nonNullFeedId = feed.id!;
+                  List<RssItem> items = await _rssRepository.getItemsByFeedId(nonNullFeedId);
+                  Navigator.pushNamed(
+                    context, 
+                    '/detail',
+                    arguments: {
+                      'items': items,
+                      'feed': feed,
+                    },
+                  );
+                },
+                onFeedDelete: (feed) async {
+                  bool? confirmDelete = await showDialog<bool>(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text('Delete Feed'),
+                        content: Text('Are you sure you want to delete this feed?'),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, false),
+                            child: Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, true),
+                            child: Text('Delete'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                  if (confirmDelete != null && confirmDelete) {
+                    await _rssRepository.deleteFeed(feed.id!);
+                    _loadFeeds();
+                  }
+                },
+              ),
+
       ),
     );
   }

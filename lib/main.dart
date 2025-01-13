@@ -7,13 +7,6 @@ import 'package:rss_reader/models/rss_feed.dart';
 import 'package:rss_reader/services/database_helper.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  if (kDebugMode) {
-    final dbHelper = DatabaseHelper();
-    dbHelper.clearDatabase();
-  }
-
   runApp(const MyApp());
 }
 
