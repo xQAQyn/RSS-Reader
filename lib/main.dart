@@ -1,10 +1,8 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:rss_reader/views/home_page.dart';
 import 'package:rss_reader/views/detail_page.dart';
 import 'package:rss_reader/models/rss_item.dart';
 import 'package:rss_reader/models/rss_feed.dart';
-import 'package:rss_reader/services/database_helper.dart';
 
 void main() {
   runApp(const MyApp());

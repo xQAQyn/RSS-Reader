@@ -53,8 +53,28 @@ class _HomePageState extends State<HomePage> {
     );
 
     if (url != null && url.isNotEmpty) {
-      await _rssService.fetchRssFeed(url);
-      _loadFeeds();
+      showDialog(
+        context: context, 
+        barrierDismissible: false,
+        builder: (context) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      );
+
+      try {
+        await _rssService.fetchRssFeed(url);
+        await _loadFeeds();
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to add feed: $e'),
+          ),
+        );
+      } finally {
+        Navigator.pop(context);
+      }
     }
   }
 
@@ -119,7 +139,6 @@ class _HomePageState extends State<HomePage> {
                   }
                 },
               ),
-
       ),
     );
   }
